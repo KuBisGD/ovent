@@ -17,15 +17,8 @@ trait EventObserverTrait
      */
     private array $_listeners = [];
 
-    // /**
-    //  * Array of single use listeners.
-    //  *
-    //  * @var array<int|string, callable>
-    //  */
-    // private array $_onceListeners = [];
-
     /**
-     * Adds a  listerner for an event.
+     * Adds a listerner for an event.
      *
      * @param string $event Name of the event to listen on.
      * @param callable<Event> $callback A callback with the **Event** as the argument
@@ -33,15 +26,19 @@ trait EventObserverTrait
      * @param bool $once 
      * @return Listener
      */
-    public function listenEvent(string $event, callable $callback, 
-        // ?string $id = null,
-        bool $once = false
-    ): Listener {
+    public function listenEvent(string $event, callable $callback, bool $once = false): Listener
+    {
         $listener = new Listener($event, $callback, $once);
         $this->_listeners[$event][] = $listener;
         return $listener;
     }
 
+    /**
+     * Removes a **Listener** from the observere.
+     *
+     * @param Listener $listener The **Listener** to remove.
+     * @return void
+     */
     public function removeListener(Listener $listener): void
     {
         foreach ($this->_listeners as $eventName => $listeners) {
