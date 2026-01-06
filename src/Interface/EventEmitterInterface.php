@@ -32,5 +32,5 @@ interface EventEmitterInterface
      * @param mixed $data Data to send with the event.
      * @return void
      */
-    public function dispatchEvent(string $name, mixed $data = null): void;
+    public function emitEvent(string $name, mixed $data = null): void;
 }

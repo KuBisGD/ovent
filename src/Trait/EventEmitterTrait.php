@@ -32,7 +32,7 @@ trait EventEmitterTrait
         }
     }
 
-    public function dispatchEvent(string $name, mixed $data = null): void
+    public function emitEvent(string $name, mixed $data = null): void
     {   
         $event = Event::create($this, $name, $data);
         foreach ($this->observers as $weakRef) {
