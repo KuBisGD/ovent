@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kubis\Ovent\Interface;
+namespace Ewn\Ovent\Interface;
 
 /**
  * An interface that allow an object to be observed and emit events.
