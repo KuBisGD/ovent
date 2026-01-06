@@ -6,6 +6,9 @@ namespace Kubis\Ovent;
 
 use Kubis\Ovent\Event;
 
+/**
+ * Represents a listener for an event.
+ */
 class Listener
 {
     /**
