@@ -77,4 +77,15 @@ trait EventObserverTrait
     {
         $emitter->attachObserver($this);
     }
+
+    /**
+     * Reverse alias for EventEmitterInterface::detachObserver().
+     *
+     * @param EventEmitterInterface $emitter
+     * @return void
+     */
+    public function forgetEmitter(EventEmitterInterface $emitter): void
+    {
+        $emitter->detachObserver($this);
+    }
 }
