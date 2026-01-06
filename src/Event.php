@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kubis\Ovent;
+namespace Ewn\Ovent;
 
-use Kubis\Ovent\Interface\EventEmitterInterface;
-use Kubis\Ovent\Interface\EventInterface;
+use Ewn\Ovent\Interface\EventEmitterInterface;
+use Ewn\Ovent\Interface\EventInterface;
 
 /**
  * Object representing an **Event**

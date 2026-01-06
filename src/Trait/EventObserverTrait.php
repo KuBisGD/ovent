@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kubis\Ovent\Trait;
+namespace Ewn\Ovent\Trait;
 
-use Kubis\Ovent\Listener;
-use Kubis\Ovent\Event;
-use Kubis\Ovent\Interface\EventEmitterInterface;
+use Ewn\Ovent\Listener;
+use Ewn\Ovent\Event;
+use Ewn\Ovent\Interface\EventEmitterInterface;
 
 trait EventObserverTrait
 {

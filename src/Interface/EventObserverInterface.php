@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kubis\Ovent\Interface;
+namespace Ewn\Ovent\Interface;
 
-use Kubis\Ovent\Event;
+use Ewn\Ovent\Event;
 
 /**
  * An interface that allow an object to observe an event emitter.

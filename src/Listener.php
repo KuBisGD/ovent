@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kubis\Ovent;
+namespace Ewn\Ovent;
 
-use Kubis\Ovent\Event;
+use Ewn\Ovent\Event;
 
 /**
  * Represents a listener for an event.

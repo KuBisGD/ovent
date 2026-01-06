@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kubis\Ovent\Trait;
+namespace Ewn\Ovent\Trait;
 
-use Kubis\Ovent\Interface\EventObserverInterface;
-use Kubis\Ovent\Event;
+use Ewn\Ovent\Interface\EventObserverInterface;
+use Ewn\Ovent\Event;
 use WeakReference;
 
 trait EventEmitterTrait
