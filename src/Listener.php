@@ -8,6 +8,9 @@ use Kubis\Ovent\Event;
 
 class Listener
 {
+    /**
+     * @var callable
+     */
     private $callback;
 
     /**
