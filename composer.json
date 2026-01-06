@@ -1,11 +1,11 @@
 {
-    "name": "kubis/ovent",
+    "name": "ewn/ovent",
     "description": "An event system using a form of the observer design pattern.",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Kubis\\Ovent\\": "src/"
+            "Ewn\\Ovent\\": "src/"
         }
     },
     "authors": [
