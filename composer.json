@@ -1,6 +1,7 @@
 {
     "name": "kubis/ovent",
     "description": "An event system using a form of the observer design pattern.",
+    "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -13,5 +14,6 @@
             "email": "142990773+KuBisGD@users.noreply.github.com"
         }
     ],
+    "minimum-stability": "stable",
     "require": {}
 }
