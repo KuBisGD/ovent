@@ -1,0 +1,17 @@
+{
+    "name": "kubis/ovent",
+    "description": "An event system using a form of the observer design pattern.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kubis\\Ovent\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "KuBisGD",
+            "email": "142990773+KuBisGD@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
