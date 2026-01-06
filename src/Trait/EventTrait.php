@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Events\Trait;
+namespace Kubis\Ovent\Trait;
 
 trait EventTrait
 {
