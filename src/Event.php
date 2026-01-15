@@ -13,6 +13,11 @@ use Ewn\Ovent\Interface\EventInterface;
 class Event
 {
     /**
+     * The time in microseconds at which the event was created.
+     */
+    public readonly float $timeStamp;
+
+    /**
      * Constructor
      *
      * @param EventEmitterInterface|EventInterface $target Object that dispatched the event.
@@ -23,7 +28,9 @@ class Event
         public private(set) EventEmitterInterface|EventInterface $target,
         public private(set) string $name,
         public private(set) mixed $detail,
-    ) {}
+    ) {
+        $this->timeStamp = microtime(as_float: true);
+    }
     
     /**
      * Create a new **Event**.
