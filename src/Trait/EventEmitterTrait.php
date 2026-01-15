@@ -35,12 +35,12 @@ trait EventEmitterTrait
     public function emitEvent(string $name, mixed $data = null): void
     {   
         $event = Event::create($this, $name, $data);
-        foreach ($this->_observers as $weakRef) {
+        foreach ($this->_observers as $key => $weakRef) {
             $observer = $weakRef->get();
             if ($observer) {
                 $observer->receiveEvent($event);
             } else {
-                unset($this->_observers[$weakRef]);
+                unset($this->_observers[$key]);
             }
         }
     }
