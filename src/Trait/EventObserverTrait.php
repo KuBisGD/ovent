@@ -18,7 +18,7 @@ trait EventObserverTrait
     private array $_listeners = [];
 
     /**
-     * Adds a listerner for an event.
+     * Adds a listener for an event.
      *
      * @param string $event Name of the event to listen on.
      * @param callable<Event> $callback A callback with the **Event** as the argument
@@ -34,7 +34,7 @@ trait EventObserverTrait
     }
 
     /**
-     * Removes a **Listener** from the observere.
+     * Removes a **Listener** from the observer.
      *
      * @param Listener $listener The **Listener** to remove.
      * @return void
