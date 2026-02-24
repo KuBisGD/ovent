@@ -10,12 +10,17 @@ use Ewn\Ovent\Interface\EventInterface;
 /**
  * Object representing an **Event**
  */
-readonly class Event
+class Event
 {
     /**
      * The time in microseconds at which the event was created.
      */
-    public float $timeStamp;
+    readonly public float $timeStamp;
+
+    /**
+     * If the event should continue to the rest of the listeners
+     */
+    public private(set) bool $active = true;
 
     /**
      * Constructor
@@ -25,9 +30,9 @@ readonly class Event
      * @param mixed $detail Custom **Event** data.
      */
     private function __construct(
-        public EventEmitterInterface|EventInterface $target,
-        public string $name,
-        public mixed $detail,
+        readonly public EventEmitterInterface|EventInterface $target,
+        readonly public string $name,
+        readonly public mixed $detail,
     ) {
         $this->timeStamp = microtime(as_float: true);
     }
@@ -43,5 +48,15 @@ readonly class Event
     public static function create(EventEmitterInterface $target, string $name, mixed $detail): self
     {
         return new self($target, $name, $detail);
+    }
+
+    /**
+     * Stops the event from continuing to other listeners
+     *
+     * @return void
+     */
+    public function stopEvent(): void
+    {
+        $this->active = false;
     }
 }

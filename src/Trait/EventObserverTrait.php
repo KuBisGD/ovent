@@ -65,6 +65,9 @@ trait EventObserverTrait
 
         if ($listeners) {
             foreach ($listeners as $id => $listener) {
+                if ($event->active === false) {
+                    break;
+                }
                 $listener($event);
                 if ($listener->once) {
                     unset($this->_listeners[$event->name][$id]);
@@ -76,18 +79,20 @@ trait EventObserverTrait
     }
 
     /**
-     * Reverse alias for EventEmitterInterface::attachObserver().
+     * Reverse alias for {@see Ewn\Ovent\Interface\EventEmitterInterface::attachObserver() EventEmitterInterface::attachObserver()}.
      *
      * @param EventEmitterInterface $emitter
      * @return void
      */
-    public function observeEmitter(EventEmitterInterface $emitter): void
+    public function observeEmitter(EventEmitterInterface ...$emitter): void
     {
-        $emitter->attachObserver($this);
+        foreach ($emitter as $eventEmitter) {
+            $eventEmitter->attachObserver($this);
+        }
     }
 
     /**
-     * Reverse alias for EventEmitterInterface::detachObserver().
+     * Reverse alias for {@see Ewn\Ovent\Interface\EventEmitterInterface::detachObserver() EventEmitterInterface::detachObserver()}.
      *
      * @param EventEmitterInterface $emitter
      * @return void
