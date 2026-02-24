@@ -12,14 +12,26 @@ use Ewn\Ovent\Event;
 class Listener
 {
     /**
+     * The amount of times this **Listener**s callable has been called.
+     */
+    public private(set) int $calls = 0;
+
+    /**
+     * The amount of times the **Listener** has been invoked.
+     */
+    public private(set) int $invokes = 0;
+
+    /**
+     * If the Listener should be called or not.
+     *
+     * @var boolean
+     */
+    public bool $active = true;
+
+    /**
      * @var callable
      */
     private $callback;
-
-    /**
-     * The amount of times this **Listener** has been called.
-     */
-    public private(set) int $calls = 0;
 
     /**
      * Constructor
@@ -36,10 +48,13 @@ class Listener
         $this->callback = $callback;
     }
 
-    public function __invoke(Event $event)
+    public function __invoke(Event $event): void
     {
         $this->calls++;
-        call_user_func($this->callback, $event);
+        if ($this->active) {
+            $this->invokes++;
+            call_user_func($this->callback, $event); 
+        }
     }
 
     /**
