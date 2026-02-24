@@ -34,6 +34,16 @@ trait EventEmitterTrait
         }
     }
 
+    /**
+     * Removes all Observers from this emitter.
+     *
+     * @return void
+     */
+    public function detachAllObserver(): void
+    {
+        $this->_observers = [];
+    }
+
     public function emitEvent(string $name, mixed $data = null): void
     {   
         $event = Event::create($this, $name, $data);

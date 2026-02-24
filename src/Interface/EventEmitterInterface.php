@@ -26,6 +26,13 @@ interface EventEmitterInterface
     public function detachObserver(EventObserverInterface $observer): void;
 
     /**
+     * Removes all Observers from this emitter.
+     *
+     * @return void
+     */
+    public function detachAllObserver(): void;
+
+    /**
      * Sends an event to all observers for this emitter.
      *
      * @param string $name Name of event.
