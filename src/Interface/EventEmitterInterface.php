@@ -15,7 +15,7 @@ interface EventEmitterInterface
      * @param EventObserverInterface $observer Object to attach.
      * @return void
      */
-    public function attachObserver(EventObserverInterface $observer): void;
+    public function attachObserver(EventObserverInterface ...$observer): void;
 
     /**
      * Remove an observer from this emitter.

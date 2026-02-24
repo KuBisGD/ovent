@@ -17,9 +17,11 @@ trait EventEmitterTrait
      */
     private array $_observers = [];
 
-    public function attachObserver(EventObserverInterface $observer): void
+    public function attachObserver(EventObserverInterface ...$observer): void
     {
-        $this->_observers[] = WeakReference::create($observer);
+        foreach ($observer as $eventObserver) {
+           $this->_observers[] = WeakReference::create($eventObserver); 
+        }
     }
 
     public function detachObserver(EventObserverInterface $observer): void
