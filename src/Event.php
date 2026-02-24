@@ -38,7 +38,7 @@ readonly class Event
      * @param EventEmitterInterface|EventInterface $target Object that dispatched the event.
      * @param string $name Name of the **Event**.
      * @param mixed $detail Custom data to add to the **Event**.
-     * @return self
+     * @return Event
      */
     public static function create(EventEmitterInterface $target, string $name, mixed $detail): self
     {

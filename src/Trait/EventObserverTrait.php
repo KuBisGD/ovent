@@ -51,6 +51,14 @@ trait EventObserverTrait
         }
     }
 
+    /**
+     * Allows an observers to receive an event.
+     *
+     * Called by an **EventEmitter** when its {@see Ewn\Ovent\Interface\EventEmitterInterface::emitEvent() emitEvent}  method is called.
+     *
+     * @param Event $event
+     * @return void
+     */
     public function receiveEvent(Event $event): void
     {
         $listeners = $this->_listeners[$event->name] ?? null;
