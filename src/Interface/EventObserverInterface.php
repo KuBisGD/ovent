@@ -12,7 +12,9 @@ use Ewn\Ovent\Event;
 interface EventObserverInterface
 {
     /**
-     * Called by an **EventEmitter** when its dispatch method is called.
+     * Allows an observers to receive an event.
+     *
+     * Called by an **EventEmitter** when its {@see Ewn\Ovent\Interface\EventEmitterInterface::emitEvent() emitEvent}  method is called.
      *
      * @param Event $event
      * @return void
