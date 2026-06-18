@@ -12,10 +12,10 @@ interface EventEmitterInterface
     /**
      * Add an object to observe this emitter.
      *
-     * @param EventObserverInterface $observer Object to attach.
+     * @param EventObserverInterface|EventObserverInterface[] $observer Object to attach.
      * @return void
      */
-    public function attachObserver(EventObserverInterface ...$observer): void;
+    public function attachObserver(EventObserverInterface|array $observer): void;
 
     /**
      * Remove an observer from this emitter.
@@ -30,7 +30,7 @@ interface EventEmitterInterface
      *
      * @return void
      */
-    public function detachAllObserver(): void;
+    public function detachAllObservers(): void;
 
     /**
      * Sends an event to all observers for this emitter.

@@ -6,8 +6,12 @@ namespace Ewn\Ovent\Trait;
 
 use Ewn\Ovent\Interface\EventObserverInterface;
 use Ewn\Ovent\Event;
+use InvalidArgumentException;
 use WeakReference;
 
+/**
+ * Trait for a default implementation of the {@see Ewn\Ovent\Interface\EventEmitterInterface EventEmitterInterface}
+ */
 trait EventEmitterTrait
 {
     /**
@@ -17,10 +21,28 @@ trait EventEmitterTrait
      */
     private array $_observers = [];
 
-    public function attachObserver(EventObserverInterface ...$observer): void
+    /**
+     * Add an object to observe this emitter.
+     *
+     * @param EventObserverInterface|array $observer
+     * @return void
+     * 
+     * @throws InvalidArgumentException Argument is not an observer.
+     */
+    public function attachObserver(EventObserverInterface|array $observer): void
     {
+        if ($observer instanceof EventObserverInterface) {
+           $this->_observers[] = WeakReference::create($observer);
+           return;
+        }
+
         foreach ($observer as $eventObserver) {
-           $this->_observers[] = WeakReference::create($eventObserver); 
+            if ($eventObserver instanceof EventObserverInterface) {
+                $this->_observers[] = WeakReference::create($eventObserver);
+            } else {
+                throw new InvalidArgumentException('array must only contain observers');
+            }
+            
         }
     }
 
@@ -39,7 +61,7 @@ trait EventEmitterTrait
      *
      * @return void
      */
-    public function detachAllObserver(): void
+    public function detachAllObservers(): void
     {
         $this->_observers = [];
     }
@@ -53,6 +75,12 @@ trait EventEmitterTrait
                 $observer->receiveEvent($event);
             } else {
                 unset($this->_observers[$key]);
+            }
+
+            
+            // stop event if not active (mby don't use)
+            if ($event->active === false) {
+                break;
             }
         }
     }
