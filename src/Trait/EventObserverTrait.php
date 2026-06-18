@@ -7,7 +7,11 @@ namespace Ewn\Ovent\Trait;
 use Ewn\Ovent\Listener;
 use Ewn\Ovent\Event;
 use Ewn\Ovent\Interface\EventEmitterInterface;
+use Closure;
 
+/**
+ * Trait for a default implementation of the {@see Ewn\Ovent\Interface\EventObserverInterface EventObserverInterface}
+ */
 trait EventObserverTrait
 {
     /**
@@ -21,16 +25,32 @@ trait EventObserverTrait
      * Adds a listener for an event.
      *
      * @param string $event Name of the event to listen on.
-     * @param callable<Event> $callback A callback with the **Event** as the argument
-     * @param null|string $id 
-     * @param bool $once 
-     * @return Listener
+     * @param Closure(Event):void $callback A callback with the **Event** as the argument. Gets bound to the current object.
+     * @param bool $once If the listener should only be called once.
+     * @return Listener The resulting listener.
      */
-    public function listenEvent(string $event, callable $callback, bool $once = false): Listener
+    public function listenEvent(string $event, Closure $callback, bool $once = false): Listener
     {
-        $listener = new Listener($event, $callback, $once);
+        // $callback = $callback->bindTo($this);
+        $listener = new Listener(
+            belongsTo: $this, 
+            name: $event, 
+            callback: $callback, 
+            once: $once
+        );
         $this->_listeners[$event][] = $listener;
         return $listener;
+    }
+
+    /**
+     * Add an existing listener to the observer.
+     *
+     * @param Listener $listener Listener to add.
+     * @return void
+     */
+    public function addListener(Listener $listener): void
+    {
+        $this->_listeners[$listener->name][] = $listener;
     }
 
     /**
@@ -68,7 +88,9 @@ trait EventObserverTrait
                 if ($event->active === false) {
                     break;
                 }
+                
                 $listener($event);
+
                 if ($listener->once) {
                     unset($this->_listeners[$event->name][$id]);
                     $this->_listeners[$event->name] = [...$this->_listeners[$event->name]];
