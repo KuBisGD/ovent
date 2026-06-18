@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace Ewn\Ovent;
 
+use Closure;
+use Ewn\Ovent\Attribute\BindTo;
 use Ewn\Ovent\Event;
+use Ewn\Ovent\Interface\EventObserverInterface;
+use Exception;
+use ReflectionFunction;
+use Ewn\Ovent\Enum\Scope;
 
 /**
  * Represents a listener for an event.
@@ -26,26 +32,27 @@ class Listener
      *
      * @var boolean
      */
-    public bool $active = true;
+    public private(set) bool $active = true;
 
     /**
-     * @var callable
+     * @var Closure(Event):void
      */
-    private $callback;
+    private Closure $callback;
 
     /**
      * Constructor
      *
      * @param string $name
-     * @param callable $callback
+     * @param Closure(Event):void $callback
      * @param boolean $once
      */
     public function __construct(
+        private EventObserverInterface $belongsTo,
         public private(set) string $name,
-        callable $callback,
+        Closure $callback,
         public private(set) bool $once
     ) {
-        $this->callback = $callback;
+        $this->replaceCallback($callback);
     }
 
     public function __invoke(Event $event): void
@@ -53,18 +60,104 @@ class Listener
         $this->calls++;
         if ($this->active) {
             $this->invokes++;
-            call_user_func($this->callback, $event); 
+            call_user_func($this->callback, $event);
         }
     }
 
     /**
-     * Replace this **Listener**s callback with a new callable.
+     * Replace this **Listener**s callback with a new Closure.
      *
-     * @param callable $newCallback The new callback.
+     * @param Closure(Event):void $newCallback The new callback.
+     * @return void
+     * 
+     * @throws Exception If the Closure could not be bound to the observer.
+     */
+    public function replaceCallback(Closure $newCallback): void
+    {
+        // $closure = $newCallback->bindTo($this->belongsTo, $this->belongsTo);
+        $closure = $this->handleAttributes($newCallback);
+        $this->callback = $closure ?? fn (Event $e) => throw new Exception('listener was not bound to an observer for '.$e->name.' on '.static::class );
+        if ($closure === null) {
+            throw new Exception('could not bind listener to observer');
+        } 
+    }
+
+    /**
+     * Makes the listener active.
+     *
      * @return void
      */
-    public function replaceCallback(callable $newCallback): void
+    public function activate(): void
     {
-        $this->callback = $newCallback;
+        $this->active = true;
+    }
+
+    /**
+     * Deactivates the listener.
+     *
+     * @return void
+     */
+    public function deactivate(): void
+    {
+        $this->active = false;
+    }
+
+    /**
+     * Sets the call amount back to 0.
+     *
+     * @return void
+     */
+    public function resetCallCounter(): void
+    {
+        $this->calls = 0;
+    }
+
+    /**
+     * Sets the invoke amount back to 0.
+     *
+     * @return void
+     */
+    public function resetInvokeCounter(): void
+    {
+        $this->calls = 0;
+    }
+
+    /**
+     * Resets all counters.
+     *
+     * @return void
+     */
+    public function resetCounters(): void
+    {
+        $this->resetCallCounter();
+        $this->resetInvokeCounter();
+    }
+
+    /**
+     * Handles potential Attributes on the closure.
+     *
+     * @param Closure $closure
+     * @return Closure
+     */
+    private function handleAttributes(Closure $closure): Closure
+    {
+        $ref = new ReflectionFunction($closure);
+        $attributes = $ref->getAttributes();
+
+        foreach ($attributes as $attribute) {
+            switch ($attribute->name) {
+                case BindTo::class:
+                    $att = $attribute->newInstance();
+                    $closure = $closure->bindTo(
+                        newThis: $this->belongsTo,
+                        newScope: ($att->scope === Scope::PRIVATE) ? $this->belongsTo : null
+                    );
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return $closure;
     }
 }
