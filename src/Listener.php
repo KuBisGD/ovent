@@ -119,7 +119,7 @@ class Listener
      */
     public function resetInvokeCounter(): void
     {
-        $this->calls = 0;
+        $this->invokes = 0;
     }
 
     /**
