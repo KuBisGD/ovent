@@ -74,12 +74,13 @@ class Listener
      */
     public function replaceCallback(Closure $newCallback): void
     {
-        // $closure = $newCallback->bindTo($this->belongsTo, $this->belongsTo);
         $closure = $this->handleAttributes($newCallback);
-        $this->callback = $closure ?? fn (Event $e) => throw new Exception('listener was not bound to an observer for '.$e->name.' on '.static::class );
+        $this->callback = $closure 
+            ?? fn (Event $e) => throw new Exception('listener was not bound to an observer for '.$e->name.' on '.static::class);
+
         if ($closure === null) {
             throw new Exception('could not bind listener to observer');
-        } 
+        }
     }
 
     /**
@@ -137,9 +138,9 @@ class Listener
      * Handles potential Attributes on the closure.
      *
      * @param Closure $closure
-     * @return Closure
+     * @return null|Closure
      */
-    private function handleAttributes(Closure $closure): Closure
+    private function handleAttributes(Closure $closure): ?Closure
     {
         $ref = new ReflectionFunction($closure);
         $attributes = $ref->getAttributes();
@@ -148,10 +149,16 @@ class Listener
             switch ($attribute->name) {
                 case BindTo::class:
                     $att = $attribute->newInstance();
-                    $closure = $closure->bindTo(
+                    $newBound = $closure->bindTo(
                         newThis: $this->belongsTo,
                         newScope: ($att->scope === Scope::PRIVATE) ? $this->belongsTo : null
                     );
+                    
+                    if ($newBound === null) {
+                        return null;
+                    }
+
+                    $closure = $newBound;
                     break;
                 default:
                     break;
