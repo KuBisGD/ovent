@@ -6,6 +6,9 @@ namespace Ewn\Ovent\Trait;
 
 use Ewn\Ovent\Interface\EventInterface;
 
+/**
+ * Adds the ability to observe and emit events.
+ */
 trait EventTrait
 {
     use EventEmitterTrait, EventObserverTrait;
