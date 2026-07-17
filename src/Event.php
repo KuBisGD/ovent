@@ -47,7 +47,7 @@ class Event
      */
     public static function create(EventEmitterInterface $target, string $name, mixed $detail): self
     {
-        return new self($target, $name, $detail);
+        return new static($target, $name, $detail);
     }
 
     /**
