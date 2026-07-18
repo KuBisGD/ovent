@@ -36,6 +36,22 @@ class Listener
     public private(set) bool $active = true;
 
     /**
+     * The current scope that the listener is bound to.
+     */
+    public private(set) ?Scope $scope;
+
+    /**
+     * Type of the listeners owner.
+     *
+     * @var string
+     */
+    public string $ownerType {
+        get {
+            return $this->belongsTo::class;
+        }
+    }
+
+    /**
      * @var Closure(Event):void
      */
     private Closure $callback;
@@ -75,6 +91,7 @@ class Listener
      */
     public function replaceCallback(Closure $newCallback): void
     {
+        $this->scope = null;
         $closure = $this->handleAttributes($newCallback);
         $this->callback = $closure 
             ?? ExceptionClosure::new('closure was not set correctly');
@@ -159,6 +176,8 @@ class Listener
                     if ($newBound === null) {
                         return null;
                     }
+
+                    $this->scope = $att->scope;
 
                     $closure = $newBound;
                     break;
