@@ -11,6 +11,7 @@ use Ewn\Ovent\Interface\EventObserverInterface;
 use Exception;
 use ReflectionFunction;
 use Ewn\Ovent\Enum\Scope;
+use Ewn\Ovent\Exceptions\ExceptionClosure;
 
 /**
  * Represents a listener for an event.
@@ -76,7 +77,8 @@ class Listener
     {
         $closure = $this->handleAttributes($newCallback);
         $this->callback = $closure 
-            ?? fn (Event $e) => throw new Exception('listener was not bound to an observer for '.$e->name.' on '.static::class);
+            ?? ExceptionClosure::new('closure was not set correctly');
+            // ?? fn (Event $e) => throw new Exception('listener was not bound to an observer for '.$e->name.' on '.static::class);
 
         if ($closure === null) {
             throw new Exception('could not bind listener to observer');
