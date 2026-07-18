@@ -23,7 +23,9 @@ trait EventEmitterTrait
 
     /**
      * Add an object to observe this emitter.
-     *
+     * 
+     * (The attached observer will be weakly stored in the emitter)
+     * 
      * @param EventObserverInterface|array $observer
      * @return void
      * 
