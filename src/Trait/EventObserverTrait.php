@@ -22,7 +22,7 @@ trait EventObserverTrait
     private array $_listeners = [];
 
     /**
-     * Adds a listener for an event.
+     * Creates and adds a listener for an event.
      *
      * @param string $event Name of the event to listen on.
      * @param Closure(Event):void $callback A callback with the **Event** as the argument. Gets bound to the current object.
@@ -31,7 +31,6 @@ trait EventObserverTrait
      */
     public function listenEvent(string $event, Closure $callback, bool $once = false): Listener
     {
-        // $callback = $callback->bindTo($this);
         $listener = new Listener(
             belongsTo: $this, 
             name: $event, 
@@ -122,5 +121,36 @@ trait EventObserverTrait
     public function forgetEmitter(EventEmitterInterface $emitter): void
     {
         $emitter->detachObserver($this);
+    }
+
+    /**
+     * Gets an array of all listeners on the observer.
+     *
+     * @return array<int|string, Listener>
+     */
+    public function getListenersFor(string $event): array
+    {
+        return isset($this->_listeners[$event]) ? $this->_listeners[$event] : [];
+    }
+
+    /**
+     * Gets all the observed events.
+     *
+     * @return array
+     */
+    public function getObservedEvents(): array
+    {
+        return array_keys($this->_listeners);
+    }
+
+    /**
+     * Checks if the observer is listening for a specific event.
+     *
+     * @param string $event
+     * @return boolean
+     */
+    public function isListeningFor(string $event): bool
+    {
+        return array_key_exists($event, $this->_listeners);
     }
 }
