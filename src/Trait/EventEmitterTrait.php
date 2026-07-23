@@ -68,9 +68,9 @@ trait EventEmitterTrait
         $this->_observers = [];
     }
 
-    public function emitEvent(string $name, mixed $data = null): void
+    public function emitEvent(string $name, mixed $data = null, string $eventType = Event::class): void
     {   
-        $event = Event::create($this, $name, $data);
+        $event = $eventType::create($this, $name, $data);
         foreach ($this->_observers as $key => $weakRef) {
             $observer = $weakRef->get();
             if ($observer) {

@@ -29,7 +29,7 @@ class Event
      * @param string $name Name of the **Event**.
      * @param mixed $detail Custom **Event** data.
      */
-    private function __construct(
+    protected function __construct(
         readonly public EventEmitterInterface|EventInterface $target,
         readonly public string $name,
         readonly public mixed $detail,

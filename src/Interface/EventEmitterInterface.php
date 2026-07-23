@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Ewn\Ovent\Interface;
 
+use Ewn\Ovent\Event;
+
 /**
  * An interface that allow an object to be observed and emit events.
  */
@@ -37,7 +39,8 @@ interface EventEmitterInterface
      *
      * @param string $name Name of event.
      * @param mixed $data Data to send with the event.
+     * @param class-string<Event> $eventType Set to use custom event type.
      * @return void
      */
-    public function emitEvent(string $name, mixed $data = null): void;
+    public function emitEvent(string $name, mixed $data = null, string $eventType = Event::class): void;
 }
