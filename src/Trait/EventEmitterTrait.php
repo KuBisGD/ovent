@@ -26,7 +26,7 @@ trait EventEmitterTrait
      * 
      * (The attached observer will be weakly stored in the emitter)
      * 
-     * @param EventObserverInterface|array $observer
+     * @param EventObserverInterface|EventObserverInterface[] $observer
      * @return void
      * 
      * @throws InvalidArgumentException Argument is not an observer.
@@ -85,5 +85,40 @@ trait EventEmitterTrait
                 break;
             }
         }
+    }
+
+    /**
+     * Gets the invoking order of the emitters observers.
+     *
+     * @return array<int, EventObserverInterface>
+     */
+    public function getObserverOrdering(): array
+    {
+        $order = [];
+        foreach ($this->_observers as $observerRef) {
+            $observer = $observerRef->get();
+            if ($observer instanceof EventObserverInterface) {
+                $order[] = $observer;
+            }
+        }
+
+        return $order;
+    }
+
+    /**
+     * Checks if the observer is observing the emitter.
+     *
+     * @param EventObserverInterface $observer
+     * @return boolean
+     */
+    public function isObservedBy(EventObserverInterface $observer): bool
+    {
+        foreach ($this->_observers as $observerRef) {
+            if ($observerRef->get() === $observer) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
