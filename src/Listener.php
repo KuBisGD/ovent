@@ -12,6 +12,7 @@ use Exception;
 use ReflectionFunction;
 use Ewn\Ovent\Enum\Scope;
 use Ewn\Ovent\Exceptions\ExceptionClosure;
+use WeakReference;
 
 /**
  * Represents a listener for an event.
@@ -41,13 +42,14 @@ class Listener
     public private(set) ?Scope $scope;
 
     /**
-     * Type of the listeners owner.
+     * Type of the listeners owner, null if the owner does not exists.
      *
      * @var string
      */
-    public string $ownerType {
+    public ?string $ownerType {
         get {
-            return $this->belongsTo::class;
+            $owner = $this->belongsTo->get();
+            return ($owner instanceof EventObserverInterface) ? $owner::class : null;
         }
     }
 
@@ -57,6 +59,13 @@ class Listener
     private Closure $callback;
 
     /**
+     * WeakReference to the Object the listener belongs to.
+     *
+     * @var WeakReference<EventObserverInterface>
+     */
+    private readonly WeakReference $belongsTo;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -64,11 +73,12 @@ class Listener
      * @param boolean $once
      */
     public function __construct(
-        private EventObserverInterface $belongsTo,
+        EventObserverInterface $belongsTo,
         public private(set) string $name,
         Closure $callback,
         public private(set) bool $once
     ) {
+        $this->belongsTo = WeakReference::create($belongsTo);
         $this->replaceCallback($callback);
     }
 
@@ -168,9 +178,10 @@ class Listener
             switch ($attribute->name) {
                 case BindTo::class:
                     $att = $attribute->newInstance();
+                    $belongsTo = $this->belongsTo->get();
                     $newBound = $closure->bindTo(
-                        newThis: $this->belongsTo,
-                        newScope: ($att->scope === Scope::PRIVATE) ? $this->belongsTo : null
+                        newThis: $belongsTo,
+                        newScope: ($att->scope === Scope::PRIVATE) ? $belongsTo : null
                     );
                     
                     if ($newBound === null) {
