@@ -64,7 +64,6 @@ trait EventObserverTrait
             foreach ($listeners as $key => $storedListener) {
                 if ($storedListener === $listener) {
                     unset($this->_listeners[$eventName][$key]);
-                    $this->_listeners[$eventName] = [...$this->_listeners[$eventName]];
                 }
             }
         }
