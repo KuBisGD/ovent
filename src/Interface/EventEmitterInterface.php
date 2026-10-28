@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ewn\Ovent\Interface;
 
+use BackedEnum;
 use Ewn\Ovent\Event;
 
 /**
@@ -18,6 +19,7 @@ interface EventEmitterInterface
      * @return void
      */
     public function attachObserver(EventObserverInterface|array $observer): void;
+    // public function attachObserver(EventObserverInterface ...$observer): void;
 
     /**
      * Remove an observer from this emitter.
@@ -37,10 +39,10 @@ interface EventEmitterInterface
     /**
      * Sends an event to all observers for this emitter.
      *
-     * @param string $name Name of event.
+     * @param string|BackedEnum<string> $name Name of event or a backed enum.
      * @param mixed $data Data to send with the event.
      * @param class-string<Event> $eventType Set to use custom event type.
      * @return void
      */
-    public function emitEvent(string $name, mixed $data = null, string $eventType = Event::class): void;
+    public function emitEvent(string|BackedEnum $name, mixed $data = null, string $eventType = Event::class): void;
 }

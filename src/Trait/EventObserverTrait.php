@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ewn\Ovent\Trait;
 
+use BackedEnum;
 use Ewn\Ovent\Listener;
 use Ewn\Ovent\Event;
 use Ewn\Ovent\Interface\EventEmitterInterface;
@@ -24,20 +25,21 @@ trait EventObserverTrait
     /**
      * Creates and adds a listener for an event.
      *
-     * @param string $event Name of the event to listen on.
+     * @param string|BackedEnum<string> $event Name of the event to listen on.
      * @param Closure(Event):void $callback A callback with the **Event** as the argument. Gets bound to the current object.
      * @param bool $once If the listener should only be called once.
      * @return Listener The resulting listener.
      */
-    public function listenEvent(string $event, Closure $callback, bool $once = false): Listener
+    public function listenEvent(string|BackedEnum $event, Closure $callback, bool $once = false): Listener
     {
+        $eventName = $event instanceof BackedEnum ? $event->value : $event;
         $listener = new Listener(
             belongsTo: $this, 
-            name: $event, 
+            name: $eventName, 
             callback: $callback, 
             once: $once
         );
-        $this->_listeners[$event][] = $listener;
+        $this->_listeners[$eventName][] = $listener;
         return $listener;
     }
 

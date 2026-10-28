@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ewn\Ovent\Trait;
 
+use BackedEnum;
 use Ewn\Ovent\Interface\EventObserverInterface;
 use Ewn\Ovent\Event;
 use InvalidArgumentException;
@@ -68,8 +69,9 @@ trait EventEmitterTrait
         $this->_observers = [];
     }
 
-    public function emitEvent(string $name, mixed $data = null, string $eventType = Event::class): void
-    {   
+    public function emitEvent(string|BackedEnum $name, mixed $data = null, string $eventType = Event::class): void
+    {  
+        $name = $name instanceof BackedEnum ? $name->value : $name; 
         $event = $eventType::create($this, $name, $data);
         foreach ($this->_observers as $key => $weakRef) {
             $observer = $weakRef->get();
